@@ -1,0 +1,71 @@
+<html>
+  <head>
+    <title>Identidock</title>
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+      integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+      crossorigin="anonymous"
+    />
+  </head>
+  <body>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-sm">
+          <form method="POST">
+            <h3 class="display-3">Hello</h3>
+            <div class="form-group row">
+              <div class="col-xs-2">
+                <input
+                  id="inputName"
+                  type="text"
+                  name="name"
+                  class="form-control"
+                  value="{{first}}"
+                  placeholder="Username"
+                  aria-label="Username"
+                  aria-describedby="basic-addon1"
+                  onkeyup="success()"
+                />
+              </div>
+              <div class="col-xs-2">
+                <button id="send-btn" type="submit" class="btn btn-primary">
+                  Find Out
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="row">
+          <p>
+            You look like a: <img id="user-image" src="/monster/{{second}}" />
+          </p>
+        </div>
+      </div>
+    </div>
+    <script>
+      document
+        .getElementById("send-btn")
+        .addEventListener("click", clickHandler, false);
+
+      function clickHandler(event) {
+        event.preventDefault();
+        const fetchURL = `http://${window.location.hostname}:${window.location.port}/monster/`;
+        const name = document.getElementById("inputName").value;
+        fetch(fetchURL + name, { mode: "cors" })
+          .then((response) => response.blob())
+          .then((image) => {
+            const outside = URL.createObjectURL(image);
+            document.getElementById("user-image").src = outside;
+          });
+      }
+      function success() {
+        if (document.getElementById("inputName").value === "") {
+          document.getElementById("send-btn").disabled = true;
+        } else {
+          document.getElementById("send-btn").disabled = false;
+        }
+      }
+    </script>
+  </body>
+</html>
